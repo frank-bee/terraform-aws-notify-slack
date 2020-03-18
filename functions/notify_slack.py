@@ -54,12 +54,18 @@ def notify_slack(subject, message, region):
   slack_username = os.environ['SLACK_USERNAME']
   slack_emoji = os.environ['SLACK_EMOJI']
 
+
   payload = {
     "channel": slack_channel,
     "username": slack_username,
     "icon_emoji": slack_emoji,
     "attachments": []
   }
+
+   payload = {
+      "@context": "https://schema.org/extensions",
+      "@type": "MessageCard"
+    }
 
   if type(message) is str:
     try:
@@ -73,7 +79,7 @@ def notify_slack(subject, message, region):
     payload['attachments'].append(notification)
   else:
     payload['text'] = "AWS notification"
-    payload['attachments'].append(default_notification(subject, message))
+   # payload['attachments'].append(default_notification(subject, message))
 
   data = urllib.parse.urlencode({"payload": json.dumps(payload)}).encode("utf-8")
   req = urllib.request.Request(slack_url)
